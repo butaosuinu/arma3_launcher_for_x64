@@ -1,0 +1,21 @@
+{
+  "name": "arma3_launcher_for_x64",
+  "description": "",
+  "main": "",
+  "authors": [
+    "HK_1601 team"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "uikit": "^2.27.2"
+  }
+}
