@@ -38,7 +38,7 @@ module.exports = {
 			'screen',
 			'shell'
 		]),
-		new NodeTargetPlugin(),
+		new NodeTargetPlugin()
 		// commonsPlugin
 		// new webpack.optimize.UglifyJsPlugin()
 	],
