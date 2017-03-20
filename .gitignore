@@ -2,6 +2,9 @@
 .AppleDouble
 .LSOverride
 app/render/*
+config.json
+
+preset/*
 
 lib
 assets
