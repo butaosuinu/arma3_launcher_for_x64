@@ -28,6 +28,7 @@
 	<script type="es6">
 		const fs = require('fs')
 		const {dialog, BrowserWindow} = require('electron').remote
+		const common = require('../js/utilService.js')
 		const self = this
 
 		this.on('mount', (function () {
@@ -37,7 +38,7 @@
 		}))
 
 		this.loadConfig = function() {
-			const config = JSON.parse(fs.readFileSync('./config.json', 'utf-8'))
+			const config = common.loadConfigFile()
 			self.refs.A3client.value = config.client
 			self.refs.A3Folder.value = config.a3dir
 			self.refs.A3options.value = config.option

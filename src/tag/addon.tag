@@ -48,6 +48,7 @@
 
 	<script type="es6">
 		const fs = require('fs')
+		const common = require('../js/utilService.js')
 		const self = this
 
 		this.on('mount', (function () {
