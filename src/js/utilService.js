@@ -15,4 +15,9 @@ common.loadAllPresets = () => {
 	return presets
 }
 
+common.loadAddonsInPreset = (name) => {
+	const preset = JSON.parse(fs.readFileSync('./preset/' + name, 'utf-8'))
+	return preset.addons
+}
+
 module.exports = common

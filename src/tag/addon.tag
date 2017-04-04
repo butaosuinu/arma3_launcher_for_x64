@@ -75,7 +75,7 @@
 				self.addonsInPreset = []
 			} else {
 				self.isNewPreset = false
-				self.addonsInPreset = self.loadAddonsInPreset(self.refs.preset.value + '.json')
+				self.addonsInPreset = common.loadAddonsInPreset(self.refs.preset.value + '.json')
 			}
 			self.isInputName = false
 			self.update()
@@ -95,11 +95,6 @@
 		this.loadPreset = ()=> {
 			self.presets = common.loadAllPresets()
 			self.update()
-		}
-
-		this.loadAddonsInPreset = (name)=> {
-			preset = JSON.parse(fs.readFileSync('./preset/' + name, 'utf-8'))
-			return preset.addons
 		}
 
 		this.addAddon = ()=> {
