@@ -93,11 +93,7 @@
 		}
 
 		this.loadPreset = ()=> {
-			self.presets = []
-			const presetList = fs.readdirSync('preset')
-			for (preset of presetList) {
-				self.presets.push(JSON.parse(fs.readFileSync('./preset/' + preset, 'utf-8')))
-			}
+			self.presets = common.loadAllPresets()
 			self.update()
 		}
 
