@@ -3,8 +3,9 @@
 		<div class="uk-form-row">
 			<label class="uk-form-label">Select preset</label>
 			<div class="uk-form-controls">
-				<select>
+				<select ref="preset" onchange="{ loadAddonsString }">
 					<option value="">no addon</option>
+					<option each={ preset in presets }>{ preset.name }</option>
 				</select>
 			</div>
 		</div>
@@ -21,9 +22,49 @@
 
 	<script type="es6">
 		const self = this
+		const fs = require('fs')
+		const exec = require('child_process').exec
+		const util = require('../js/utilService.js')
+
+		this.a3dir = ''
+		this.launchString = ''
+		this.addonsString = ''
+
+		this.on('mount', ()=> {
+			self.presets = util.loadAllPresets()
+			self.baseSetting()
+			self.update()
+		})
+
+		this.baseSetting = ()=> {
+			const config = util.loadConfigFile()
+			let exeName = ''
+
+			if (32 === config.client) {
+				exeName = '/arma3.exe'
+			} else {
+				exeName = '/arma3_x64.exe'
+			}
+
+			self.a3dir = config.a3dir
+			self.launchString = config.a3dir + exeName + ' ' + config.option
+		}
+
+		this.loadAddonsString = ()=> {
+			this.addonsString = ''
+			const addonsArr = util.loadAddonsInPreset(self.refs.preset.value + '.json')
+			for (addon of addonsArr) {
+				addon = self.a3dir + addon + ';'
+				this.addonsString = this.addonsString + addon
+			}
+			this.addonsString = ' "-mod=' + this.addonsString + '"'
+		}
 
 		this.launchGame = function() {
-			// body...
+			exec(this.launchString + this.addonsString, (err, stdout, stderr) => {
+				if (err) {console.log(err)}
+				console.log(stdout)
+			})
 		}
 	</script>
 </play>
