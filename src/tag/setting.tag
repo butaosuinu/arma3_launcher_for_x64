@@ -48,7 +48,7 @@
 		this.selectA3Folder = function() {
 			const focusedWindow = BrowserWindow.getFocusedWindow()
 			dialog.showOpenDialog(focusedWindow, {
-				properites: ['openDirectory']
+				properties: ['openDirectory']
 			}, function(dir) {
 				if (undefined !== dir) {
 					self.refs.A3Folder.value = dir

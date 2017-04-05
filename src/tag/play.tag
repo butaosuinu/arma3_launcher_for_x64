@@ -23,6 +23,7 @@
 	<script type="es6">
 		const self = this
 		const fs = require('fs')
+		const os = require('os')
 		const exec = require('child_process').exec
 		const util = require('../js/utilService.js')
 
@@ -46,8 +47,9 @@
 				exeName = 'arma3_x64.exe'
 			}
 
-			self.a3dir = config.a3dir
-			self.launchString = '"' + config.a3dir + exeName + '" ' + config.option
+			self.a3dir = config.a3dir + '/'
+			if (os.type().toString().match('Windows') !== null) {self.a3dir = config.a3dir + '\\'}
+			self.launchString = '"' + self.a3dir + exeName + '" ' + config.option
 		}
 
 		this.loadAddonsString = ()=> {
