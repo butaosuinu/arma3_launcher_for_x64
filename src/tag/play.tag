@@ -41,13 +41,13 @@
 			let exeName = ''
 
 			if (32 === config.client) {
-				exeName = '/arma3.exe'
+				exeName = 'arma3.exe'
 			} else {
-				exeName = '/arma3_x64.exe'
+				exeName = 'arma3_x64.exe'
 			}
 
 			self.a3dir = config.a3dir
-			self.launchString = config.a3dir + exeName + ' ' + config.option
+			self.launchString = '"' + config.a3dir + exeName + '" ' + config.option
 		}
 
 		this.loadAddonsString = ()=> {
