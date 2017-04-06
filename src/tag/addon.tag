@@ -19,6 +19,7 @@
 		<div class="uk-form-row uk-width-3-4 uk-grid">
 			<div class="uk-width-1-2">
 				<div>
+					<label>Addons in Arma3 folder</label>
 					<select id="allAddon" class="addon-area" name="allAddon" ref="allAddons" multiple>
 						<option each={ addon in addons }>{ addon }<option>
 					</select>
@@ -27,6 +28,7 @@
 			</div>
 			<div class="uk-width-1-2">
 				<div>
+					<label>Addons in preset</label>
 					<select class="addon-area" ref="addonInPreset" multiple>
 						<option each={ addon in addonsInPreset }>{ addon }</option>
 					</select>
