@@ -6,6 +6,7 @@
   "scripts": {
     "build": "webpack -p; npm run css-build; node node_modules/cpx/bin/index.js 'bower_components/uikit/fonts/*' app/render/fonts",
     "build-dev": "webpack; npm run css-build; node node_modules/cpx/bin/index.js 'bower_components/uikit/fonts/*' app/render/fonts",
+    "build-win": "webpack & npm run css-build & node node_modules/cpx/bin/index.js 'bower_components/uikit/fonts/*' app/render/fonts",
     "watch": "webpack --progress --colors --watch",
     "css-build": "node-sass --include-path scss src/sass/main.scss app/render/css/main.css"
   },
