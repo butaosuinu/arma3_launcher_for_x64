@@ -24,3 +24,8 @@ $ npm i
 $ npm run build
 $ electron app/
 ```
+
+## credit
+
+- butaosuinu :　planning, coding and etc
+- raika siray : icon image
