@@ -16,6 +16,6 @@
     "tests"
   ],
   "dependencies": {
-    "uikit": "^2.27.2"
+    "uikit": "git://github.com/uikit/bower-uikit.git"
   }
 }
