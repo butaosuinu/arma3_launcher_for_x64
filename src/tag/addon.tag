@@ -1,4 +1,6 @@
 <addon>
+	<main-menu></main-menu>
+	<div class="uk-margin-top">
 	<form class="uk-form uk-form-horizontal" name="presetSetting">
 		<div class="uk-form-row">
 			<label class="uk-form-label">Select preset</label>
@@ -43,6 +45,7 @@
 		<button class="uk-margin-top uk-button uk-button-danger uk-button-large" type="button" if={ !isNewPreset } onclick="{ deletePreset }">Delete preset</button>
 		<p class="uk-text-success" if="{ isSave }">save successed</p>
 	</form>
+	</div>
 
 	<style type="scss">
 		.addon-area{

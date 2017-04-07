@@ -1,4 +1,6 @@
 <setting>
+	<main-menu></main-menu>
+	<div class="uk-margin-top">
 	<form class="uk-form uk-form-horizontal">
 		<div class="uk-form-row">
 			<label class="uk-form-label">Arma3 client</label>
@@ -24,6 +26,7 @@
 		<button class="uk-margin-top uk-button uk-button-primary uk-button-large" type="button" onclick="{ saveConfig }">Save</button>
 		<p class="uk-text-success" if="{ isSave }">save successed</p>
 	</form>
+	</div>
 
 	<script type="es6">
 		const fs = require('fs')

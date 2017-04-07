@@ -5,6 +5,7 @@ const riot   = require('riot')
 require('../tag/addon.tag')
 require('../tag/play.tag')
 require('../tag/setting.tag')
+require('../tag/main-menu.tag')
 
 // routing
 const Router = require('riot-router')

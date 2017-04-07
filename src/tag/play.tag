@@ -1,4 +1,6 @@
 <play>
+	<main-menu></main-menu>
+	<div class="uk-margin-top">
 	<form class="uk-form uk-form-horizontal">
 		<div class="uk-form-row">
 			<label class="uk-form-label">Select preset</label>
@@ -11,6 +13,7 @@
 		</div>
 		<button class="uk-button uk-button-primary launch-button" type="button" onclick="{ launchGame }">Arma3 launch</button>
 	</form>
+	</div>
 
 	<style type="scss">
 		.launch-button{
