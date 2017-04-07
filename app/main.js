@@ -4,7 +4,7 @@ const url = require('url')
 
 let win
 
-let appIcon = nativeImage.createFromPath(path.join(__dirname, 'app', 'image', 'main_icon.png'))
+let appIcon = nativeImage.createFromPath(path.join(__dirname, 'image', 'main_icon.png'))
 
 function createWindow() {
 	win = new BrowserWindow({width: 980, height: 640, minWidth: 980, minHeight: 640, icon: appIcon})

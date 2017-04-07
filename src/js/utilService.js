@@ -1,23 +1,54 @@
+const app = require('electron').remote.app
 const fs = require('fs')
+const path = require('path')
 
 let common = {}
 
 common.loadConfigFile = () => {
-	return JSON.parse(fs.readFileSync('./config.json', 'utf-8'))
+	if (!common.isExistFileOrDir(path.join(app.getAppPath(), 'config.json'))) {
+		initConfig()
+	}
+	return JSON.parse(fs.readFileSync(path.join(app.getAppPath(), 'config.json') || 'null', 'utf-8'))
 }
 
 common.loadAllPresets = () => {
 	let presets = []
-	const presetList = fs.readdirSync('./preset')
+	if (!common.isExistFileOrDir(path.join(app.getAppPath(), 'preset'))) {
+		fs.mkdirSync(path.join(app.getAppPath(), 'preset'))
+	}
+	const presetList = fs.readdirSync(path.join(app.getAppPath(), 'preset'))
 	for (preset of presetList) {
-		presets.push(JSON.parse(fs.readFileSync('./preset/' + preset, 'utf-8')))
+		presets.push(JSON.parse(fs.readFileSync(path.join(app.getAppPath(), 'preset/' + preset), 'utf-8')))
 	}
 	return presets
 }
 
 common.loadAddonsInPreset = (name) => {
-	const preset = JSON.parse(fs.readFileSync('./preset/' + name, 'utf-8'))
+	const preset = JSON.parse(fs.readFileSync(path.join(app.getAppPath(), 'preset/' + name), 'utf-8'))
 	return preset.addons
+}
+
+common.isExistFileOrDir = (name) => {
+	try {
+		fs.statSync(name)
+		return true
+	} catch(e) {
+		if (e.code === 'ENOENT') {return false}
+	}
+}
+
+const initConfig = () => {
+	const data = {
+		client: 64,
+		a3dir: null,
+		option: null
+	}
+	fs.writeFile(path.join(app.getAppPath(), 'config.json'), JSON.stringify(data, null, ' '), function(err) {
+		if (err) {
+			console.log(err)
+			return
+		}
+	})
 }
 
 module.exports = common

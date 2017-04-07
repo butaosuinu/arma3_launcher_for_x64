@@ -27,7 +27,8 @@
 
 	<script type="es6">
 		const fs = require('fs')
-		const {dialog, BrowserWindow} = require('electron').remote
+		const path = require('path')
+		const {dialog, BrowserWindow, app} = require('electron').remote
 		const common = require('../js/utilService.js')
 		const self = this
 
@@ -66,7 +67,7 @@
 				a3dir: dir,
 				option: option
 			}
-			fs.writeFile('config.json', JSON.stringify(data, null, ' '), function(err) {
+			fs.writeFile(path.join(app.getAppPath(), 'config.json'), JSON.stringify(data, null, ' '), function(err) {
 				if (err) {
 					console.log(err)
 					return

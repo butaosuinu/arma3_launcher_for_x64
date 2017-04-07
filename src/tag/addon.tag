@@ -53,6 +53,8 @@
 
 	<script type="es6">
 		const fs = require('fs')
+		const path = require('path')
+		const {app} = require('electron').remote
 		const common = require('../js/utilService.js')
 		const self = this
 
@@ -156,7 +158,7 @@
 				addons: addons
 			}
 			const fileName = presetName.replace(' ', '_') + '.json'
-			fs.writeFile('./preset/' + fileName, JSON.stringify(data, null, ' '), function(err) {
+			fs.writeFile(path.join(app.getAppPath(), 'preset/' + fileName), JSON.stringify(data, null, ' '), function(err) {
 				if (err) {
 					console.log(err)
 					return
@@ -176,7 +178,7 @@
 		this.deletePreset = ()=> {
 			const targetPreset = self.refs.preset.value
 			const fileName = targetPreset.replace(' ', '_') + '.json'
-			fs.unlink('./preset/' + fileName, function(err) {
+			fs.unlink(path.join(app.getAppPath(), 'preset/' + fileName), function(err) {
 				if (err) {
 					console.log(err)
 					return
