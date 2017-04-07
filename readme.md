@@ -3,6 +3,8 @@
 This is a game launcher for Arma3 64bit client.  
 This app made with electron, Riot.js and Uikit css framework.  
 
+[App download](https://github.com/butaosuinu/arma3_launcher_for_x64/releases)
+
 ## feature
 
 - x64 client support
@@ -13,6 +15,13 @@ This app made with electron, Riot.js and Uikit css framework.
 ## for developer
 
 This is a electron app. So, you need electron npm package.  
+
+### Requirement
+
+- Node.js v6.0+
+- electron v1.6.2
+- electron-packager
+- (When you build this app with Mac) wine
 
 ### install
 
