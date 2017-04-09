@@ -96,7 +96,7 @@
 		require('simple-multiselect')
 
 		this.on('mount', (()=> {
-			if (0 == self.refs.preset.value) {
+			if ("0" === self.refs.preset.value) {
 				self.isNewPreset = true
 			} else {
 				self.isNewPreset = false
