@@ -2,7 +2,9 @@
 .AppleDouble
 .LSOverride
 app/render/*
+app/preset/*
 config.json
+
 
 preset/*
 
