@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var path = require('path')
 
 var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('common');
 var JsonpTemplatePlugin = webpack.JsonpTemplatePlugin;
@@ -63,6 +64,8 @@ module.exports = {
 		]
 	},
 	resolve: {
+		modules: ['node_modules', 'bower_components'],
+		descriptionFiles: ['package.json', 'bower.json'],
 		extensions: ['.js', '.tag']
 	}
 };
