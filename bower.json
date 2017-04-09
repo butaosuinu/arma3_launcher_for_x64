@@ -16,6 +16,7 @@
     "tests"
   ],
   "dependencies": {
-    "uikit": "git://github.com/uikit/bower-uikit.git"
+    "uikit": "git://github.com/uikit/bower-uikit.git",
+    "simple-multiselect": "^0.0.2"
   }
 }

@@ -22,18 +22,14 @@
 			<div class="uk-width-1-2">
 				<div>
 					<label>Addons in Arma3 folder</label>
-					<select id="allAddon" class="addon-area" name="allAddon" ref="allAddons" multiple>
-						<option each={ addon in addons }>{ addon }<option>
-					</select>
+					<div id="allAddon" class="addon-area"></div>
 				</div>
 				<button class="uk-button" type="button" onclick="{ addAddon }">add</button>
 			</div>
 			<div class="uk-width-1-2">
 				<div>
 					<label>Addons in preset</label>
-					<select class="addon-area" ref="addonInPreset" multiple>
-						<option each={ addon in addonsInPreset }>{ addon }</option>
-					</select>
+					<div id="presetAddon" class="addon-area"></div>
 				</div>
 				<button class="uk-button" type="button" onclick="{ removeAddon }">remove</button>
 				<!-- <button class="uk-button" type="button"><i class="uk-icon-arrow-up"></i></button> -->
@@ -52,6 +48,38 @@
 			width: 100%;
 			height: 240px !important;
 		}
+
+		.multiselect-outer-div {
+			width: 100% !important;
+			height: 240px !important;
+			border: 1px solid #CCC;
+		}
+
+		.multiselect-outer-div ul {
+			list-style: none;
+			padding: 0px;
+			margin: 0px;
+		}
+
+		.multiselect-outer-div ul li {
+			cursor: default;
+			padding: 4px;
+			border-bottom: 1px solid #EEE;
+			display: list-item;
+			color: #111;
+		}
+
+		.multiselect-outer-div ul li:hover {
+			background-color: #CCC;
+			text-decoration: none;
+			color: #FFFFFF;
+		}
+
+		.multiselect-li-selected {
+			background-color: #35b3ee !important;
+			color: #FFFFFF !important;
+			text-decoration: none;
+		}
 	</style>
 
 	<script type="es6">
@@ -60,6 +88,12 @@
 		const {app} = require('electron').remote
 		const common = require('../js/utilService.js')
 		const self = this
+
+		let addonsInDir
+		let addonsInPresetSelectbox
+		let allAddonList
+
+		require('simple-multiselect')
 
 		this.on('mount', (()=> {
 			if (0 == self.refs.preset.value) {
@@ -73,8 +107,38 @@
 			self.addonsInPreset = []
 			self.loadPreset()
 			self.loadAddonsInA3Dir()
+			self.updateSelectBox()
 			self.update()
 		}))
+
+		this.updateSelectBox = () => {
+			if (document.querySelector('#allAddon div')) {
+				document.querySelector('#allAddon div').parentNode.removeChild(document.querySelector('#allAddon div'))
+			}
+			if (document.querySelector('#presetAddon div')) {
+				document.querySelector('#presetAddon div').parentNode.removeChild(document.querySelector('#presetAddon div'))
+			}
+			const addonData = self.addons.map((addon)=>{
+				let obj = {}
+				obj['value'] = addon
+				obj['text'] = addon
+				return obj
+			})
+			addonsInDir = window.multiselect.render({
+				elementId: 'allAddon',
+				data: addonData
+			})
+			const inPresetData = self.addonsInPreset.map((addon)=>{
+				let obj2 = {}
+				obj2['value'] = addon
+				obj2['text'] = addon
+				return obj2
+			})
+			addonsInPresetSelectbox = window.multiselect.render({
+				elementId: 'presetAddon',
+				data: inPresetData
+			})
+		}
 
 		this.newPreset = ()=> {
 			if ("0" === self.refs.preset.value) {
@@ -84,6 +148,8 @@
 				self.isNewPreset = false
 				self.addonsInPreset = common.loadAddonsInPreset(self.refs.preset.value + '.json')
 			}
+			self.diffAddons()
+			self.updateSelectBox()
 			self.isInputName = false
 			self.update()
 		}
@@ -96,6 +162,7 @@
 					self.addons.push(addon)
 				}
 			}
+			allAddonList = self.addons
 			self.update()
 		}
 
@@ -105,28 +172,23 @@
 		}
 
 		this.addAddon = ()=> {
-			let distList = new Set()
-			let addList = []
-			for (addon of self.refs.allAddons) {
-				if (addon.selected) {addList.push(addon.value)}
-			}
-			[...(new Set(self.addonsInPreset)),...(new Set(addList))].forEach(x=>distList.add(x))
+			let distList = new Set();
+			[...(new Set(self.addonsInPreset)),...(new Set(addonsInDir.getSelectedValues()))].forEach(x=>distList.add(x))
 			self.addonsInPreset = [...distList]
+			self.diffAddons()
+			self.updateSelectBox()
 			self.update()
 		}
 
 		this.removeAddon = ()=> {
-			const addonInPreset = self.refs.addonInPreset
-			let selectedArr = []
-			for (selected of addonInPreset) {
-				if (selected.selected) {selectedArr.push(selected.value)}
-					selected.selected = false
-			}
+			const selectedArr = addonsInPresetSelectbox.getSelectedValues()
 			for (selected of selectedArr) {
 				self.addonsInPreset = self.addonsInPreset.filter((v)=> {
 					return v !== selected
 				})
 			}
+			self.diffAddons()
+			self.updateSelectBox()
 			self.update()
 		}
 
@@ -136,6 +198,15 @@
 
 		this.downAddon = ()=> {
 			// body...
+		}
+
+		this.diffAddons = ()=> {
+			self.addons = allAddonList
+			for (va of self.addonsInPreset) {
+				self.addons = self.addons.filter((v)=> {
+					return v !== va
+				})
+			}
 		}
 
 		this.savePreset = ()=> {
