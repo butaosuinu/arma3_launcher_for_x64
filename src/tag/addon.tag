@@ -145,8 +145,9 @@
 				self.isNewPreset = true
 				self.addonsInPreset = []
 			} else {
+				const fileName = self.refs.preset.value.replace(' ', '_') + '.json'
 				self.isNewPreset = false
-				self.addonsInPreset = common.loadAddonsInPreset(self.refs.preset.value + '.json')
+				self.addonsInPreset = common.loadAddonsInPreset(fileName)
 			}
 			self.diffAddons()
 			self.updateSelectBox()
