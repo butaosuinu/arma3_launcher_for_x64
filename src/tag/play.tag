@@ -57,7 +57,8 @@
 
 		this.loadAddonsString = ()=> {
 			this.addonsString = ''
-			const addonsArr = util.loadAddonsInPreset(self.refs.preset.value + '.json')
+			const fileName = self.refs.preset.value.replace(' ', '_') + '.json'
+			const addonsArr = util.loadAddonsInPreset(fileName)
 			for (addon of addonsArr) {
 				addon = self.a3dir + addon + ';'
 				this.addonsString = this.addonsString + addon
