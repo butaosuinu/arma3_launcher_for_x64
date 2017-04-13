@@ -32,8 +32,8 @@
 					<div id="presetAddon" class="addon-area"></div>
 				</div>
 				<button class="uk-button" type="button" onclick="{ removeAddon }">remove</button>
-				<!-- <button class="uk-button" type="button"><i class="uk-icon-arrow-up"></i></button> -->
-				<!-- <button class="uk-button" type="button"><i class="uk-icon-arrow-down"></i></button> -->
+				<button class="uk-button" type="button" onclick="{ upAddon }"><i class="uk-icon-arrow-up"></i></button>
+				<button class="uk-button" type="button" onclick="{ downAddon }"><i class="uk-icon-arrow-down"></i></button>
 			</div>
 		</div>
 		<button class="uk-margin-top uk-button uk-button-primary uk-button-large" type="button" onclick="{ savePreset }">Save preset</button>
@@ -194,11 +194,31 @@
 		}
 
 		this.upAddon = ()=> {
-			// body...
+			const slctdKeyArr = addonsInPresetSelectbox.getSelectedIndexes()
+			let addonArr = self.addonsInPreset
+			for (v of slctdKeyArr) {
+				if (0 !== v) {
+					[addonArr[v - 1], addonArr[v]] = [addonArr[v], addonArr[v - 1]]
+				}
+			}
+			self.addonsInPreset = addonArr
+			self.diffAddons()
+			self.updateSelectBox()
+			self.update()
 		}
 
 		this.downAddon = ()=> {
-			// body...
+			const slctdKeyArr = addonsInPresetSelectbox.getSelectedIndexes()
+			let addonArr = self.addonsInPreset
+			for (v of slctdKeyArr) {
+				if (self.addonsInPreset.length - 1 !== v) {
+					[addonArr[v], addonArr[v + 1]] = [addonArr[v + 1], addonArr[v]]
+				}
+			}
+			self.addonsInPreset = addonArr
+			self.diffAddons()
+			self.updateSelectBox()
+			self.update()
 		}
 
 		this.diffAddons = ()=> {
