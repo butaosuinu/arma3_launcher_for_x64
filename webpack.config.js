@@ -66,6 +66,10 @@ module.exports = {
 	resolve: {
 		modules: ['node_modules', 'bower_components'],
 		descriptionFiles: ['package.json', 'bower.json'],
-		extensions: ['.js', '.tag']
+		extensions: ['.js', '.tag'],
+		alias: {
+			uikit: 'uikit/js/uikit.js',
+			components: 'bower_components/uikit/js/components'
+		}
 	}
 };

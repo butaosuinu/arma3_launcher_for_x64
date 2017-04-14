@@ -1,5 +1,6 @@
-const jquery = require('jquery')
-const riot   = require('riot')
+window.jQuery = require('jquery')
+const riot    = require('riot')
+window.UIkit  = require('uikit')
 
 // tags
 require('../tag/addon.tag')

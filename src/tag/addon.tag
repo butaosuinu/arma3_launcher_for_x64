@@ -96,6 +96,9 @@
 
 		require('simple-multiselect')
 
+		require('../../bower_components/uikit/js/components/notify')
+
+
 		this.on('mount', (()=> {
 			if ("0" === self.refs.preset.value) {
 				self.isNewPreset = true
@@ -173,6 +176,11 @@
 			self.loadAddonsInA3Dir()
 			self.diffAddons()
 			self.updateSelectBox()
+			UIkit.notify("Addons list was reloaded.", {
+				status:'success',
+				pos:'top-right',
+				timeout:1000
+			})
 			self.update()
 		}
 
