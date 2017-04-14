@@ -25,6 +25,7 @@
 					<div id="allAddon" class="addon-area"></div>
 				</div>
 				<button class="uk-button" type="button" onclick="{ addAddon }">add</button>
+				<button class="uk-button" type="button" onclick="{ reloadAddon }"><i class="uk-icon-refresh"></i></button>
 			</div>
 			<div class="uk-width-1-2">
 				<div>
@@ -164,6 +165,14 @@
 				}
 			}
 			allAddonList = self.addons
+			self.update()
+		}
+
+		this.reloadAddon = ()=> {
+			self.addons = []
+			self.loadAddonsInA3Dir()
+			self.diffAddons()
+			self.updateSelectBox()
 			self.update()
 		}
 
