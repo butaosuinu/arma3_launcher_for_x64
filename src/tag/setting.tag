@@ -24,7 +24,6 @@
 			</div>
 		</div>
 		<button class="uk-margin-top uk-button uk-button-primary uk-button-large" type="button" onclick="{ saveConfig }">Save</button>
-		<p class="uk-text-success" if="{ isSave }">save successed</p>
 	</form>
 	</div>
 
@@ -35,9 +34,10 @@
 		const common = require('../js/utilService.js')
 		const self = this
 
+		require('../../bower_components/uikit/js/components/notify')
+
 		this.on('mount', (function () {
 			self.loadConfig()
-			self.isSave = false
 			self.update()
 		}))
 
@@ -75,10 +75,13 @@
 					console.log(err)
 					return
 				}
-				self.isSave = true
+				UIkit.notify("save successed", {
+					status:'success',
+					pos:'bottom-center',
+					timeout:800
+				})
 				self.update()
 				window.setTimeout(function(){
-					self.isSave = false
 					self.update()
 				}, 1000)
 			})

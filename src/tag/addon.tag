@@ -40,7 +40,6 @@
 		<button class="uk-margin-top uk-button uk-button-primary uk-button-large" type="button" onclick="{ savePreset }">Save preset</button>
 		<button class="uk-margin-top uk-button uk-button-large" type="button">Cancel</button>
 		<button class="uk-margin-top uk-button uk-button-danger uk-button-large" type="button" if={ !isNewPreset } onclick="{ deletePreset }">Delete preset</button>
-		<p class="uk-text-success" if="{ isSave }">save successed</p>
 	</form>
 	</div>
 
@@ -275,10 +274,13 @@
 					console.log(err)
 					return
 				}
-				self.isSave = true
+				UIkit.notify("save successed", {
+					status:'success',
+					pos:'bottom-center',
+					timeout:800
+				})
 				self.update()
 				window.setTimeout(()=>{
-					self.isSave = false
 					self.loadPreset()
 					self.newPreset()
 					self.refs.newPresetName.value = ''
