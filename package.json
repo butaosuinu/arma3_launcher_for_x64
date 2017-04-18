@@ -10,7 +10,9 @@
     "watch": "webpack --progress --colors --watch",
     "css-build": "node-sass --include-path scss src/sass/main.scss app/render/css/main.css",
     "app-build": "electron-packager ./app arma3launcher64 --platform=win32 --arch=x64 --version=1.6.2 --icon=app/image/main_icon.ico --overwrite",
-    "app-build-mac": "electron-packager ./app arma3launcher64 --platform=darwin --arch=x64 --version=1.6.2 --icon=app/image/main_icon.ico --overwrite"
+    "app-build-unix": "electron-packager ./app arma3launcher64 --platform=darwin --arch=x64 --version=1.6.2 --icon=app/image/main_icon.ico --overwrite",
+    "total-build-win": "npm run build-win & app-build",
+    "total-build-unix": "npm run build-dev & app-build-unix"
   },
   "keywords": [
     "Arma3"

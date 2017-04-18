@@ -31,10 +31,12 @@ $ git clone https://github.com/butaosuinu/arma3_launcher_for_x64.git
 $ cd arma3_launcher_for_x64/
 $ npm i
 $ bower install
-$ npm run build
-$ electron app/
+$ npm run total-build-win # when your machine is unix/linux, you can use "npm run total-build-unix"
+
 or
-$ npm run app-build-win
+
+$ npm build-dev
+$ electron ./app
 ```
 
 enjoy!
