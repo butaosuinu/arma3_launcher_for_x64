@@ -60,6 +60,12 @@ module.exports = {
 				test: /\.js$|\.tag$/,
 				exclude: /node_modules/,
 				use: 'babel-loader',
+				use: {
+					loader: 'babel-loader',
+					query: {
+						presets: ['es2015']
+					}
+				}
 			}
 		]
 	},
