@@ -39,8 +39,16 @@
 		</div>
 		<button class="uk-margin-top uk-button uk-button-primary uk-button-large" type="button" onclick="{ savePreset }">Save preset</button>
 		<button class="uk-margin-top uk-button uk-button-large" type="button">Cancel</button>
-		<button class="uk-margin-top uk-button uk-button-danger uk-button-large" type="button" if={ !isNewPreset } onclick="{ deletePreset }">Delete preset</button>
+		<button class="uk-margin-top uk-button uk-button-danger uk-button-large" type="button" if={ !isNewPreset } onclick="{ showDelModal }">Delete preset</button>
 	</form>
+	</div>
+
+	<div id="del-modal" class="uk-modal">
+		<div class="uk-modal-dialog">
+			<p>Are you sure you want to delete this preset?</p>
+			<button class="uk-margin-top uk-button uk-button-large" type="button" onclick="{ hideModal }">Cancel</button>
+			<button class="uk-margin-top uk-button uk-button-danger uk-button-large" type="button" onclick="{ deletePreset }">Delete preset</button>
+		</div>
 	</div>
 
 	<style type="scss">
@@ -95,8 +103,8 @@
 
 		require('simple-multiselect')
 
+		require('../../bower_components/uikit/js/core/modal')
 		require('../../bower_components/uikit/js/components/notify')
-
 
 		this.on('mount', (()=> {
 			if ("" === self.refs.preset.value) {
@@ -111,6 +119,7 @@
 			self.loadPreset()
 			self.loadAddonsInA3Dir()
 			self.updateSelectBox()
+			self.modal = UIkit.modal('#del-modal')
 			self.update()
 		}))
 
@@ -295,10 +304,19 @@
 			})
 		}
 
+		this.showDelModal = ()=> {
+			self.modal.show()
+		}
+
+		this.hideModal = ()=> {
+			self.modal.hide()
+		}
+
 		this.deletePreset = ()=> {
 			const targetPreset = self.refs.preset.value
 			const fileName = targetPreset.replace(/ /g, '_') + '.json'
 			fs.unlink(path.join(app.getAppPath(), 'preset/' + fileName), function(err) {
+				self.modal.hide()
 				if (err) {
 					console.error(err)
 					UIkit.notify('delete failed', {
@@ -313,12 +331,10 @@
 					pos:'bottom-center',
 					timeout:800
 				})
-				window.setTimeout(()=>{
-					self.loadPreset()
-					self.newPreset()
-					self.refs.newPresetName.value = ''
-					self.update()
-				}, 1000)
+				self.loadPreset()
+				self.newPreset()
+				self.refs.newPresetName.value = ''
+				self.update()
 			})
 		}
 
