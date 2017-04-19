@@ -6,8 +6,8 @@
 			<label class="uk-form-label">Select preset</label>
 			<div class="uk-form-controls">
 				<select ref="preset" onchange="{ newPreset }">
-					<option value="0"> - new preset - </option>
-					<option each={ preset in presets }>{ preset.name }</option>
+					<option value=""> - new preset - </option>
+					<option each={ preset in presets } value="{ preset.value }">{ preset.name }</option>
 				</select>
 			</div>
 		</div>
@@ -99,7 +99,7 @@
 
 
 		this.on('mount', (()=> {
-			if ("0" === self.refs.preset.value) {
+			if ("" === self.refs.preset.value) {
 				self.isNewPreset = true
 			} else {
 				self.isNewPreset = false
@@ -144,11 +144,11 @@
 		}
 
 		this.newPreset = ()=> {
-			if ("0" === self.refs.preset.value) {
+			if ("" === self.refs.preset.value) {
 				self.isNewPreset = true
 				self.addonsInPreset = []
 			} else {
-				const fileName = self.refs.preset.value.replace(' ', '_') + '.json'
+				const fileName = self.refs.preset.value.replace(/ /g, '_') + '.json'
 				self.isNewPreset = false
 				self.addonsInPreset = common.loadAddonsInPreset(fileName)
 			}
@@ -248,8 +248,9 @@
 
 		this.savePreset = ()=> {
 			let presetName = ''
-			if ("0" !== self.refs.preset.value) {
-				presetName = self.refs.preset.value
+			if ("" !== self.refs.preset.value) {
+				const tgt = JSON.parse(fs.readFileSync(path.join(app.getAppPath(), 'preset/' + self.refs.preset.value + '.json'), 'utf-8'))
+				presetName = tgt.name
 			} else if ('' === self.refs.newPresetName.value) {
 				self.isInputName = true
 				return
@@ -268,13 +269,18 @@
 				name: presetName,
 				addons: addons
 			}
-			const fileName = presetName.replace(' ', '_') + '.json'
+			const fileName = presetName.replace(/ /g, '_') + '.json'
 			fs.writeFile(path.join(app.getAppPath(), 'preset/' + fileName), JSON.stringify(data, null, ' '), function(err) {
 				if (err) {
-					console.log(err)
+					console.error(err)
+					UIkit.notify('save failed', {
+						status:'danger',
+						pos:'bottom-center',
+						timeout:800
+					})
 					return
 				}
-				UIkit.notify("save successed", {
+				UIkit.notify('save successed', {
 					status:'success',
 					pos:'bottom-center',
 					timeout:800
@@ -291,15 +297,28 @@
 
 		this.deletePreset = ()=> {
 			const targetPreset = self.refs.preset.value
-			const fileName = targetPreset.replace(' ', '_') + '.json'
+			const fileName = targetPreset.replace(/ /g, '_') + '.json'
 			fs.unlink(path.join(app.getAppPath(), 'preset/' + fileName), function(err) {
 				if (err) {
-					console.log(err)
+					console.error(err)
+					UIkit.notify('delete failed', {
+						status:'danger',
+						pos:'bottom-center',
+						timeout:800
+					})
 					return
 				}
-				self.loadPreset()
-				self.newPreset()
-				self.update()
+				UIkit.notify('deleted', {
+					status:'success',
+					pos:'bottom-center',
+					timeout:800
+				})
+				window.setTimeout(()=>{
+					self.loadPreset()
+					self.newPreset()
+					self.refs.newPresetName.value = ''
+					self.update()
+				}, 1000)
 			})
 		}
 

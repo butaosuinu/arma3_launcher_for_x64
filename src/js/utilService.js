@@ -20,6 +20,12 @@ common.loadAllPresets = () => {
 	for (let preset of presetList) {
 		presets.push(JSON.parse(fs.readFileSync(path.join(app.getAppPath(), 'preset/' + preset), 'utf-8')))
 	}
+	presets = presets.map((v)=>{
+		let obj = {}
+		obj['name'] = v.name
+		obj['value'] = v.name.replace(/ /g, '_')
+		return obj
+	})
 	return presets
 }
 
