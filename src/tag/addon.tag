@@ -161,7 +161,7 @@
 		this.loadAddonsInA3Dir = ()=> {
 			const config = common.loadConfigFile()
 			const addonList = fs.readdirSync(config.a3dir)
-			for (addon of addonList) {
+			for (let addon of addonList) {
 				if ("@" === addon.substring(0, 1)) {
 					self.addons.push(addon)
 				}
@@ -199,7 +199,7 @@
 
 		this.removeAddon = ()=> {
 			const selectedArr = addonsInPresetSelectbox.getSelectedValues()
-			for (selected of selectedArr) {
+			for (let selected of selectedArr) {
 				self.addonsInPreset = self.addonsInPreset.filter((v)=> {
 					return v !== selected
 				})
@@ -212,7 +212,7 @@
 		this.upAddon = ()=> {
 			const slctdKeyArr = addonsInPresetSelectbox.getSelectedIndexes()
 			let addonArr = self.addonsInPreset
-			for (v of slctdKeyArr) {
+			for (let v of slctdKeyArr) {
 				if (0 !== v) {
 					[addonArr[v - 1], addonArr[v]] = [addonArr[v], addonArr[v - 1]]
 				}
@@ -226,7 +226,7 @@
 		this.downAddon = ()=> {
 			const slctdKeyArr = addonsInPresetSelectbox.getSelectedIndexes()
 			let addonArr = self.addonsInPreset
-			for (v of slctdKeyArr) {
+			for (let v of slctdKeyArr) {
 				if (self.addonsInPreset.length - 1 !== v) {
 					[addonArr[v], addonArr[v + 1]] = [addonArr[v + 1], addonArr[v]]
 				}
@@ -239,7 +239,7 @@
 
 		this.diffAddons = ()=> {
 			self.addons = allAddonList
-			for (va of self.addonsInPreset) {
+			for (let va of self.addonsInPreset) {
 				self.addons = self.addons.filter((v)=> {
 					return v !== va
 				})

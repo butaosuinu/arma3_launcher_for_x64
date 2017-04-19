@@ -17,7 +17,7 @@ common.loadAllPresets = () => {
 		fs.mkdirSync(path.join(app.getAppPath(), 'preset'))
 	}
 	const presetList = fs.readdirSync(path.join(app.getAppPath(), 'preset'))
-	for (preset of presetList) {
+	for (let preset of presetList) {
 		presets.push(JSON.parse(fs.readFileSync(path.join(app.getAppPath(), 'preset/' + preset), 'utf-8')))
 	}
 	return presets
