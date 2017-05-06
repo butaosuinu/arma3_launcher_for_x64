@@ -5,14 +5,18 @@ This app made with electron, Riot.js and Uikit css framework.
 
 [App download](https://github.com/butaosuinu/arma3_launcher_for_x64/releases)
 
-## feature
+## Feature
 
 - x64 client support
 - Addon manager
 - launch options
 
+## For user
 
-## for developer
+Download zip file to link and extract it into folder of your choice.  
+Double click to "arma3launcher64.exe" in that folder to launch the app.  
+
+## For developer
 
 This is a electron app. So, you need electron npm package.  
 
@@ -23,7 +27,7 @@ This is a electron app. So, you need electron npm package.
 - electron-packager
 - (When you build this app with Mac) wine
 
-### install
+### Install
 
 ```
 $ npm i -g electron electron-packager
@@ -39,9 +43,9 @@ $ npm build-dev
 $ electron ./app
 ```
 
-enjoy!
+Enjoy!
 
-## credit
+## Credit
 
 - butaosuinu : planning, coding and etc
 - raika siray : icon image
