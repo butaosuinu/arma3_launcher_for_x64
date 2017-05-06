@@ -7,7 +7,7 @@
 			<div class="uk-form-controls">
 				<select ref="preset" onchange="{ loadAddonsString }">
 					<option value="">no addon</option>
-					<option each={ preset in presets }>{ preset.name }</option>
+					<option each={ preset in presets } value="{ preset.value }">{ preset.name }</option>
 				</select>
 			</div>
 		</div>
@@ -38,6 +38,7 @@
 			self.presets = util.loadAllPresets()
 			self.baseSetting()
 			self.update()
+			self.refs.preset.value = util.loadLastUsePreset()
 		})
 
 		this.baseSetting = ()=> {
@@ -68,8 +69,9 @@
 
 		this.launchGame = function() {
 			exec(this.launchString + this.addonsString, (err, stdout, stderr) => {
-				if (err) {console.log(err)}
+				if (err) {console.error(err)}
 				console.log(stdout)
+				util.savingLastUsePreset(self.refs.preset.value.replace(/ /g, '_'))
 			})
 		}
 	</script>

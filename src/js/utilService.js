@@ -43,6 +43,14 @@ common.isExistFileOrDir = (name) => {
 	}
 }
 
+common.savingLastUsePreset = (preset) => {
+	localStorage.setItem('lastUsePreset', preset)
+}
+
+common.loadLastUsePreset = () => {
+	return localStorage.lastUsePreset
+}
+
 const initConfig = () => {
 	const data = {
 		client: 64,
