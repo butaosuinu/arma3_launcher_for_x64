@@ -18,7 +18,7 @@
 			</div>
 			<p class="uk-text-danger" if="{ isInputName }">You must input preset name!</p>
 		</div>
-		<div class="uk-form-row uk-width-3-4 uk-grid">
+		<div class="uk-form-row uk-grid">
 			<div class="uk-width-1-2">
 				<div>
 					<label>Addons in Arma3 folder</label>
