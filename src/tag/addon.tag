@@ -131,20 +131,14 @@
 				document.querySelector('#presetAddon div').parentNode.removeChild(document.querySelector('#presetAddon div'))
 			}
 			const addonData = self.addons.map((addon)=>{
-				let obj = {}
-				obj['value'] = addon
-				obj['text'] = addon
-				return obj
+				return {value: addon, text: addon.name}
 			})
 			addonsInDir = window.multiselect.render({
 				elementId: 'allAddon',
 				data: addonData
 			})
 			const inPresetData = self.addonsInPreset.map((addon)=>{
-				let obj2 = {}
-				obj2['value'] = addon
-				obj2['text'] = addon
-				return obj2
+				return {value: addon, text: addon.name}
 			})
 			addonsInPresetSelectbox = window.multiselect.render({
 				elementId: 'presetAddon',
@@ -171,7 +165,7 @@
 			const config = common.loadConfigFile()
 			let addonList
 			try {
-				addonList = fs.readdirSync(config.mods_dir)
+				addonList = self.loadAddonsLocal(config)
 			} catch(e) {
 				UIkit.notify('Mods folder not found!', {
 					status:'danger',
@@ -181,17 +175,43 @@
 				console.error(e)
 				return
 			}
+			const workshopItems = self.loadAddonsWorkshop(config)
+
+			self.addons = []
+
 			for (let addon of addonList) {
-				if ("@" === addon.substring(0, 1)) {
-					self.addons.push(addon)
-				}
+				self.addons.push(addon)
+			}
+			for (let item of workshopItems) {
+				self.addons.push(item)
 			}
 			allAddonList = self.addons
 			self.update()
 		}
 
+		this.loadAddonsLocal = (config)=> {
+			let addonList = fs.readdirSync(config.mods_dir)
+			addonList = addonList.filter((item)=>{
+				return '@' === item.substring(0, 1)
+			})
+			addonList = addonList.map((item)=>{
+				return {name: item, type: 'local'}
+			})
+			return addonList
+		}
+
+		this.loadAddonsWorkshop = (config)=> {
+			let itemList = fs.readdirSync(config.a3dir + '/!Workshop')
+			itemList = itemList.filter((item)=>{
+				return '@' === item.substring(0, 1)
+			})
+			itemList = itemList.map((item)=>{
+				return {name: item + ' (Steam workshop)', type: 'steam'}
+			})
+			return itemList
+		}
+
 		this.reloadAddon = ()=> {
-			self.addons = []
 			self.loadAddonsInA3Dir()
 			self.diffAddons()
 			self.updateSelectBox()
@@ -261,7 +281,7 @@
 			self.addons = allAddonList
 			for (let va of self.addonsInPreset) {
 				self.addons = self.addons.filter((v)=> {
-					return v !== va
+					return v.name !== va
 				})
 			}
 		}
@@ -285,9 +305,12 @@
 				addons = []
 			}
 
+			const steamItem = []
+
 			const data = {
 				name: presetName,
-				addons: addons
+				addons: addons,
+				steam: steamItem
 			}
 			const fileName = presetName.replace(/ /g, '_') + '.json'
 			fs.writeFile(path.join(app.getAppPath(), 'preset/' + fileName), JSON.stringify(data, null, ' '), function(err) {
