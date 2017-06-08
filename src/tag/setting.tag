@@ -18,6 +18,12 @@
 			</div>
 		</div>
 		<div class="uk-form-row">
+			<label class="uk-form-label">Mods folder path</label>
+			<div class="uk-form-controls">
+				<input class="uk-width-1-2" type="text" name="" value="" ref="modsFolder"><button class="uk-button" type="button" onclick="{ selectModsFolder }">browse</button>
+			</div>
+		</div>
+		<div class="uk-form-row">
 			<label class="uk-form-label">launch options</label>
 			<div class="uk-form-controls">
 				<input class="uk-width-1-2" type="text" ref="A3options">
@@ -45,6 +51,7 @@
 			const config = common.loadConfigFile()
 			self.refs.A3client.value = config.client
 			self.refs.A3Folder.value = config.a3dir
+			self.refs.modsFolder.value = config.mods_dir
 			self.refs.A3options.value = config.option
 			self.update()
 		}
@@ -61,13 +68,27 @@
 			})
 		}
 
+		this.selectModsFolder = () => {
+			const focusedWindow = BrowserWindow.getFocusedWindow()
+			dialog.showOpenDialog(focusedWindow, {
+				properties: ['openDirectory']
+			}, function(dir) {
+				if (undefined !== dir) {
+					self.refs.modsFolder.value = dir
+				}
+				self.update()
+			})
+		}
+
 		this.saveConfig = function() {
 			const client = parseInt(self.refs.A3client.value)
-			const dir = self.refs.A3Folder.value
+			const a3Dir = self.refs.A3Folder.value
+			const modsDir = self.refs.modsFolder.value
 			const option = self.refs.A3options.value
 			const data = {
 				client: client,
-				a3dir: dir,
+				a3dir: a3Dir,
+				mods_dir: modsDir,
 				option: option
 			}
 			fs.writeFile(path.join(app.getAppPath(), 'config.json'), JSON.stringify(data, null, ' '), function(err) {
