@@ -31,6 +31,7 @@
 		const util = require('../js/utilService.js')
 
 		this.a3dir = ''
+		this.modsDir = ''
 		this.launchString = ''
 		this.addonsString = ''
 
@@ -52,6 +53,7 @@
 			}
 
 			self.a3dir = config.a3dir + '/'
+			self.modsDir = config.mods_dir + '/'
 			if (os.type().toString().match('Windows') !== null) {self.a3dir = config.a3dir + '\\'}
 			self.launchString = '"' + self.a3dir + exeName + '" ' + config.option
 		}
@@ -61,7 +63,7 @@
 			const fileName = self.refs.preset.value.replace(/ /g, '_') + '.json'
 			const addonsArr = util.loadAddonsInPreset(fileName)
 			for (let addon of addonsArr) {
-				addon = self.a3dir + addon + ';'
+				addon = self.modsDir + addon + ';'
 				this.addonsString = this.addonsString + addon
 			}
 			this.addonsString = ' "-mod=' + this.addonsString + '"'

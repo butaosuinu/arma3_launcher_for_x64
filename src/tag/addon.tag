@@ -169,7 +169,18 @@
 
 		this.loadAddonsInA3Dir = ()=> {
 			const config = common.loadConfigFile()
-			const addonList = fs.readdirSync(config.a3dir)
+			let addonList
+			try {
+				addonList = fs.readdirSync(config.mods_dir)
+			} catch(e) {
+				UIkit.notify('Mods folder not found!', {
+					status:'danger',
+					pos:'bottom-center',
+					timeout:5000
+				})
+				console.error(e)
+				return
+			}
 			for (let addon of addonList) {
 				if ("@" === addon.substring(0, 1)) {
 					self.addons.push(addon)
