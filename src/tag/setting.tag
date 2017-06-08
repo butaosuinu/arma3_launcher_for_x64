@@ -37,18 +37,18 @@
 		const fs = require('fs')
 		const path = require('path')
 		const {dialog, BrowserWindow, app} = require('electron').remote
-		const common = require('../js/utilService.js')
+		const util = require('../js/utilService.js')
 		const self = this
 
 		require('../../bower_components/uikit/js/components/notify')
 
-		this.on('mount', (function () {
+		this.on('mount', (()=> {
 			self.loadConfig()
 			self.update()
 		}))
 
-		this.loadConfig = function() {
-			const config = common.loadConfigFile()
+		this.loadConfig = () => {
+			const config = util.loadConfigFile()
 			self.refs.A3client.value = config.client
 			self.refs.A3Folder.value = config.a3dir
 			self.refs.modsFolder.value = config.mods_dir
@@ -56,7 +56,7 @@
 			self.update()
 		}
 
-		this.selectA3Folder = function() {
+		this.selectA3Folder = () => {
 			const focusedWindow = BrowserWindow.getFocusedWindow()
 			dialog.showOpenDialog(focusedWindow, {
 				properties: ['openDirectory']
@@ -80,7 +80,7 @@
 			})
 		}
 
-		this.saveConfig = function() {
+		this.saveConfig = () => {
 			const client = parseInt(self.refs.A3client.value)
 			const a3Dir = self.refs.A3Folder.value
 			const modsDir = self.refs.modsFolder.value
@@ -91,7 +91,7 @@
 				mods_dir: modsDir,
 				option: option
 			}
-			fs.writeFile(path.join(app.getAppPath(), 'config.json'), JSON.stringify(data, null, ' '), function(err) {
+			fs.writeFile(path.join(app.getAppPath(), 'config.json'), JSON.stringify(data, null, ' '), (err) => {
 				if (err) {
 					console.log(err)
 					return
@@ -102,7 +102,7 @@
 					timeout:800
 				})
 				self.update()
-				window.setTimeout(function(){
+				window.setTimeout(() =>{
 					self.update()
 				}, 1000)
 			})
