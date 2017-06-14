@@ -54,7 +54,10 @@
 
 			self.a3dir = config.a3dir + '/'
 			self.modsDir = config.mods_dir + '/'
-			if (os.type().toString().match('Windows') !== null) {self.a3dir = config.a3dir + '\\'}
+			if (os.type().toString().match('Windows') !== null) {
+				self.a3dir = config.a3dir + '\\'
+				self.modsDir = config.mods_dir + '\\'
+			}
 			self.launchString = '"' + self.a3dir + exeName + '" ' + config.option
 		}
 
