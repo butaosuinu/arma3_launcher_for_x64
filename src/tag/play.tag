@@ -5,7 +5,7 @@
 		<div class="uk-form-row">
 			<label class="uk-form-label">Select preset</label>
 			<div class="uk-form-controls">
-				<select ref="preset" onchange="{ loadAddonsString }">
+				<select ref="preset">
 					<option value="">no addon</option>
 					<option each={ preset in presets } value="{ preset.value }">{ preset.name }</option>
 				</select>
@@ -63,6 +63,7 @@
 
 		this.loadAddonsString = ()=> {
 			this.addonsString = ''
+			console.log(self.refs.preset.value)
 			const fileName = self.refs.preset.value.replace(/ /g, '_') + '.json'
 			const addonsArr = util.loadAddonsInPreset(fileName)
 			for (let addon of addonsArr) {
@@ -73,6 +74,7 @@
 		}
 
 		this.launchGame = function() {
+			self.loadAddonsString()
 			exec(this.launchString + this.addonsString, (err, stdout, stderr) => {
 				if (err) {console.error(err)}
 				console.log(stdout)
