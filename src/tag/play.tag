@@ -27,6 +27,7 @@
 		const self = this
 		const fs = require('fs')
 		const os = require('os')
+		const path = require('path')
 		const exec = require('child_process').exec
 		const util = require('../js/utilService.js')
 
@@ -65,10 +66,18 @@
 			this.addonsString = ''
 			console.log(self.refs.preset.value)
 			const fileName = self.refs.preset.value.replace(/ /g, '_') + '.json'
-			const addonsArr = util.loadAddonsInPreset(fileName)
+			let addonsArr = util.loadAddonsInPreset(fileName)
+			addonsArr = addonsArr.map((addon)=>{
+				return JSON.parse(addon.value)
+			})
 			for (let addon of addonsArr) {
-				addon = self.modsDir + addon + ';'
-				this.addonsString = this.addonsString + addon
+				let addonName = ''
+				if ('steam' === addon.type) {
+					addonName = path.join(self.a3dir, '!Workshop', addon.name)
+				} else {
+					addonName = self.modsDir + addon.name
+				}
+				this.addonsString = this.addonsString + addonName + ';'
 			}
 			this.addonsString = ' "-mod=' + this.addonsString + '"'
 		}
