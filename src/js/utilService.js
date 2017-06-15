@@ -66,6 +66,7 @@ const initConfig = () => {
 	const data = {
 		client: 64,
 		a3dir: null,
+		mods_dir: null,
 		option: null
 	}
 	fs.writeFile(path.join(app.getAppPath(), 'config.json'), JSON.stringify(data, null, ' '), function(err) {
