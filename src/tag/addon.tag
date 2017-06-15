@@ -131,14 +131,14 @@
 				document.querySelector('#presetAddon div').parentNode.removeChild(document.querySelector('#presetAddon div'))
 			}
 			const addonData = self.addons.map((addon)=>{
-				return {value: addon, text: addon.name}
+				return {value: addon.value, text: addon.name}
 			})
 			addonsInDir = window.multiselect.render({
 				elementId: 'allAddon',
 				data: addonData
 			})
 			const inPresetData = self.addonsInPreset.map((addon)=>{
-				return {value: addon, text: addon.name}
+				return {value: addon.value, text: addon.text}
 			})
 			addonsInPresetSelectbox = window.multiselect.render({
 				elementId: 'presetAddon',
@@ -185,6 +185,15 @@
 			for (let item of workshopItems) {
 				self.addons.push(item)
 			}
+			self.addons = self.addons.map((item)=>{
+				if ('steam' === item.type) {
+					return {
+						name: item.name + ' (Steam workshop)',
+						value: JSON.stringify(item)
+					}
+				}
+				return {name: item.name, value: JSON.stringify(item)}
+			})
 			allAddonList = self.addons
 			self.update()
 		}
@@ -206,7 +215,7 @@
 				return '@' === item.substring(0, 1)
 			})
 			itemList = itemList.map((item)=>{
-				return {name: item + ' (Steam workshop)', type: 'steam'}
+				return {name: item, type: 'steam'}
 			})
 			return itemList
 		}
@@ -230,7 +239,7 @@
 
 		this.addAddon = ()=> {
 			let distList = new Set();
-			[...(new Set(self.addonsInPreset)),...(new Set(addonsInDir.getSelectedValues()))].forEach(x=>distList.add(x))
+			[...(new Set(self.addonsInPreset)),...(new Set(addonsInDir.getSelected()))].forEach(x=>distList.add(x))
 			self.addonsInPreset = [...distList]
 			self.diffAddons()
 			self.updateSelectBox()
@@ -238,10 +247,10 @@
 		}
 
 		this.removeAddon = ()=> {
-			const selectedArr = addonsInPresetSelectbox.getSelectedValues()
+			const selectedArr = addonsInPresetSelectbox.getSelected()
 			for (let selected of selectedArr) {
 				self.addonsInPreset = self.addonsInPreset.filter((v)=> {
-					return v !== selected
+					return v.text !== selected.text
 				})
 			}
 			self.diffAddons()
@@ -281,7 +290,7 @@
 			self.addons = allAddonList
 			for (let va of self.addonsInPreset) {
 				self.addons = self.addons.filter((v)=> {
-					return v.name !== va
+					return v.name !== va.text
 				})
 			}
 		}
@@ -298,14 +307,20 @@
 				presetName = self.refs.newPresetName.value
 			}
 
-			let addons
+			let addons = []
+			let steamItem = []
 			if (self.addonsInPreset) {
-				addons = self.addonsInPreset
-			} else {
-				addons = []
+				const presetObj = self.addonsInPreset.map((item)=>{
+					return JSON.parse(item.value)
+				})
+				for (let addon of presetObj) {
+					if ('steam' === addon.type) {
+						steamItem.push(addon.name)
+					} else {
+						addons.push(addon.name)
+					}
+				}
 			}
-
-			const steamItem = []
 
 			const data = {
 				name: presetName,

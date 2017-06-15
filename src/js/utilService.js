@@ -30,8 +30,19 @@ common.loadAllPresets = () => {
 }
 
 common.loadAddonsInPreset = (name) => {
-	const preset = JSON.parse(fs.readFileSync(path.join(app.getAppPath(), 'preset/' + name), 'utf-8'))
-	return preset.addons
+	const presetJSON = JSON.parse(fs.readFileSync(path.join(app.getAppPath(), 'preset/' + name), 'utf-8'))
+	const localArr = presetJSON.addons.map((addon)=>{
+		return {text: addon, value: JSON.stringify({name: addon, type: 'local'})}
+	})
+	const swArr = presetJSON.steam.map((addon)=>{
+		return {
+			text: addon + ' (Steam workshop)',
+			value: JSON.stringify({name: addon, type: 'steam'})
+		}
+	})
+	const preset = localArr.concat(swArr)
+
+	return preset
 }
 
 common.isExistFileOrDir = (name) => {
