@@ -31,6 +31,8 @@
 		const exec = require('child_process').exec
 		const util = require('../js/utilService.js')
 
+		const config = util.loadConfigFile()
+
 		this.a3dir = ''
 		this.modsDir = ''
 		this.launchString = ''
@@ -39,12 +41,12 @@
 		this.on('mount', ()=> {
 			self.presets = util.loadAllPresets()
 			self.baseSetting()
+			self.setLaunchParam()
 			self.update()
 			self.refs.preset.value = util.loadLastUsePreset()
 		})
 
 		this.baseSetting = ()=> {
-			const config = util.loadConfigFile()
 			let exeName = ''
 
 			if (32 === config.client) {
@@ -60,6 +62,13 @@
 				self.modsDir = config.mods_dir + '\\'
 			}
 			self.launchString = '"' + self.a3dir + exeName + '" ' + config.option
+		}
+
+		this.setLaunchParam = ()=> {
+			if (config.no_intro) {self.launchString = self.launchString + ' -skipIntro'}
+			if (config.no_splash) {self.launchString = self.launchString + ' -noSplash'}
+			if (config.window) {self.launchString = self.launchString + ' -window'}
+			self.launchString = self.launchString + ' -name=' + config.name
 		}
 
 		this.loadAddonsString = ()=> {
