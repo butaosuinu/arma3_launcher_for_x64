@@ -11,12 +11,12 @@
 				</select>
 			</div>
 		</div>
-		<div class="uk-form-row" if={ isNewPreset }>
+		<div class="uk-form-row uk-clearfix" if={ isNewPreset }>
 			<label class="uk-form-label">preset name</label>
 			<div class="uk-form-controls">
 				<input class="uk-width-1-2" type="text" ref="newPresetName">
+				<span class="uk-text-danger uk-margin-left" if="{ isInputName }">You must input preset name!</span>
 			</div>
-			<p class="uk-text-danger" if="{ isInputName }">You must input preset name!</p>
 		</div>
 		<div class="uk-form-row uk-grid">
 			<div class="uk-width-1-2">
@@ -54,12 +54,12 @@
 	<style type="scss">
 		.addon-area{
 			width: 100%;
-			height: 240px !important;
+			height: 350px !important;
 		}
 
 		.multiselect-outer-div {
 			width: 100% !important;
-			height: 240px !important;
+			height: 350px !important;
 			border: 1px solid #CCC;
 		}
 
@@ -71,16 +71,16 @@
 
 		.multiselect-outer-div ul li {
 			cursor: default;
-			padding: 4px;
+			padding: 8px;
 			border-bottom: 1px solid #EEE;
 			display: list-item;
+			font-size: 14px;
 			color: #111;
-		}
-
-		.multiselect-outer-div ul li:hover {
-			background-color: #CCC;
-			text-decoration: none;
-			color: #FFFFFF;
+			&:hover {
+				background-color: #CCC;
+				text-decoration: none;
+				color: #FFFFFF;
+			}
 		}
 
 		.multiselect-li-selected {

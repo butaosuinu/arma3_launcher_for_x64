@@ -7,7 +7,7 @@ let win
 let appIcon = nativeImage.createFromPath(path.join(__dirname, 'image', 'main_icon.png'))
 
 function createWindow() {
-	win = new BrowserWindow({width: 980, height: 640, minWidth: 980, minHeight: 640, icon: appIcon})
+	win = new BrowserWindow({width: 980, height: 720, minWidth: 980, minHeight: 720, icon: appIcon})
 	win.loadURL(url.format({
 		pathname: path.join(__dirname, 'index.html'),
 		protocol: 'file:',
