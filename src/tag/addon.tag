@@ -18,6 +18,10 @@
 				<span class="uk-text-danger uk-margin-left" if="{ isInputName }">You must input preset name!</span>
 			</div>
 		</div>
+		<div class="uk-alert uk-alert-warning" if={ isDeledAddon }>
+			<span>There are deleted addons in the addon folder. Please check the addon list. </span>
+			<a onclick="{ showDelListModal }">Check list</a>
+		</div>
 		<div class="uk-form-row uk-grid">
 			<div class="uk-width-1-2">
 				<div>
@@ -38,16 +42,28 @@
 			</div>
 		</div>
 		<button class="uk-margin-top uk-button uk-button-primary uk-button-large" type="button" onclick="{ savePreset }">Save preset</button>
-		<button class="uk-margin-top uk-button uk-button-large" type="button">Cancel</button>
 		<button class="uk-margin-top uk-button uk-button-danger uk-button-large" type="button" if={ !isNewPreset } onclick="{ showDelModal }">Delete preset</button>
+		<button class="uk-margin-top uk-button uk-button-large" type="button">Cancel</button>
 	</form>
 	</div>
 
 	<div id="del-modal" class="uk-modal">
 		<div class="uk-modal-dialog">
 			<p>Are you sure you want to delete this preset?</p>
-			<button class="uk-margin-top uk-button uk-button-large" type="button" onclick="{ hideModal }">Cancel</button>
 			<button class="uk-margin-top uk-button uk-button-danger uk-button-large" type="button" onclick="{ deletePreset }">Delete preset</button>
+			<button class="uk-margin-top uk-button uk-button-large" type="button" onclick="{ hideModal }">Cancel</button>
+		</div>
+	</div>
+
+	<div id="deleted-addon-list-modal" class="uk-modal">
+		<div class="uk-modal-dialog">
+			<p>This list is a deleted addons list.</p>
+			<ul class="uk-list uk-list-line">
+				<li each={ deled in deledListArr }>{ deled.text }</li>
+			</ul>
+			<p>Do you want to remove deleted addons and save preset?</p>
+			<button class="uk-margin-top uk-button uk-button-large uk-button-danger" type="button" onclick="{ removeDeletedAddons }">Remove and save</button>
+			<button class="uk-margin-top uk-button uk-button-large" type="button" onclick="{ hideDelListModal }">Cancel</button>
 		</div>
 	</div>
 
@@ -112,6 +128,7 @@
 			} else {
 				self.isNewPreset = false
 			}
+			self.isDeledAddon = false
 			self.isInputName = false
 			self.addons = []
 			self.presets = []
@@ -120,6 +137,7 @@
 			self.loadAddonsInA3Dir()
 			self.updateSelectBox()
 			self.modal = UIkit.modal('#del-modal')
+			self.delListModal = UIkit.modal('#deleted-addon-list-modal')
 			self.update()
 		}))
 
@@ -154,6 +172,7 @@
 				const fileName = self.refs.preset.value.replace(/ /g, '_') + '.json'
 				self.isNewPreset = false
 				self.addonsInPreset = common.loadAddonsInPreset(fileName)
+				self.checkDeletedAddon()
 			}
 			self.diffAddons()
 			self.updateSelectBox()
@@ -295,6 +314,36 @@
 			}
 		}
 
+		this.checkDeletedAddon = ()=> {
+			let deletedAddons = self.addonsInPreset
+			for (let vf of allAddonList) {
+				deletedAddons = deletedAddons.filter((v)=> {
+					return v.text !== vf.name
+				})
+			}
+			if (0 != deletedAddons.length) {
+				self.isDeledAddon = true
+			} else {
+				self.isDeledAddon = false
+			}
+			self.deledListArr = deletedAddons
+		}
+
+		this.removeDeletedAddons = ()=> {
+			const currentPreset = self.refs.preset.value
+			for (let deled of self.deledListArr) {
+				self.addonsInPreset = self.addonsInPreset.filter((v)=>{
+					return deled.text !== v.text
+				})
+			}
+			self.savePreset()
+			self.hideDelListModal()
+			self.isDeledAddon = false
+			self.refs.preset.value = currentPreset
+			self.refs.preset.selected = currentPreset
+			self.newPreset()
+		}
+
 		this.savePreset = ()=> {
 			let presetName = ''
 			if ("" !== self.refs.preset.value) {
@@ -343,7 +392,6 @@
 					pos:'bottom-center',
 					timeout:800
 				})
-				self.update()
 				window.setTimeout(()=>{
 					self.loadPreset()
 					self.newPreset()
@@ -359,6 +407,14 @@
 
 		this.hideModal = ()=> {
 			self.modal.hide()
+		}
+
+		this.showDelListModal = ()=> {
+			self.delListModal.show()
+		}
+
+		this.hideDelListModal = ()=> {
+			self.delListModal.hide()
 		}
 
 		this.deletePreset = ()=> {
