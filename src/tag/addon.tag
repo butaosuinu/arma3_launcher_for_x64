@@ -26,6 +26,12 @@
 			<div class="uk-width-1-2">
 				<div>
 					<label>Addons in Arma3 folder</label>
+					<div class="uk-form">
+						<div class="uk-form-icon uk-width-1-1">
+							<i class="uk-icon-search"></i>
+							<input class="uk-width-1-1" type="text" oninput="{ searchAddonInDir }" ref="search">
+						</div>
+					</div>
 					<div id="allAddon" class="addon-area"></div>
 				</div>
 				<button class="uk-button" type="button" onclick="{ addAddon }">add</button>
@@ -34,6 +40,12 @@
 			<div class="uk-width-1-2">
 				<div>
 					<label>Addons in preset</label>
+					<div class="uk-form">
+						<div class="uk-form-icon uk-width-1-1">
+							<i class="uk-icon-search"></i>
+							<input class="uk-width-1-1" type="text" oninput="{ searchAddonInPreset }" ref="searchPreset">
+						</div>
+					</div>
 					<div id="presetAddon" class="addon-area"></div>
 				</div>
 				<button class="uk-button" type="button" onclick="{ removeAddon }">remove</button>
@@ -70,13 +82,12 @@
 	<style type="scss">
 		.addon-area{
 			width: 100%;
-			height: 350px !important;
-		}
-
-		.multiselect-outer-div {
-			width: 100% !important;
-			height: 350px !important;
-			border: 1px solid #CCC;
+			height: 320px !important;
+			.multiselect-outer-div {
+				width: 100% !important;
+				height: 320px !important;
+				border: 1px solid #CCC;
+			}
 		}
 
 		.multiselect-outer-div ul {
@@ -135,33 +146,38 @@
 			self.addonsInPreset = []
 			self.loadPreset()
 			self.loadAddonsInA3Dir()
-			self.updateSelectBox()
+			self.updateSelectBox(self.addons, self.addonsInPreset)
 			self.modal = UIkit.modal('#del-modal')
 			self.delListModal = UIkit.modal('#deleted-addon-list-modal')
 			self.update()
 		}))
 
-		this.updateSelectBox = () => {
-			if (document.querySelector('#allAddon div')) {
-				document.querySelector('#allAddon div').parentNode.removeChild(document.querySelector('#allAddon div'))
+		this.updateSelectBox = (dirItem = [], presetItem = []) => {
+			if (dirItem) {
+				if (document.querySelector('#allAddon div')) {
+					document.querySelector('#allAddon div').parentNode.removeChild(document.querySelector('#allAddon div'))
+				}
+				const addonData = dirItem.map((addon)=>{
+					return {value: addon.value, text: addon.text}
+				})
+				addonsInDir = window.multiselect.render({
+					elementId: 'allAddon',
+					data: addonData
+				})
 			}
-			if (document.querySelector('#presetAddon div')) {
-				document.querySelector('#presetAddon div').parentNode.removeChild(document.querySelector('#presetAddon div'))
+
+			if (presetItem) {
+				if (document.querySelector('#presetAddon div')) {
+					document.querySelector('#presetAddon div').parentNode.removeChild(document.querySelector('#presetAddon div'))
+				}
+				const inPresetData = presetItem.map((addon)=>{
+					return {value: addon.value, text: addon.text}
+				})
+				addonsInPresetSelectbox = window.multiselect.render({
+					elementId: 'presetAddon',
+					data: inPresetData
+				})
 			}
-			const addonData = self.addons.map((addon)=>{
-				return {value: addon.value, text: addon.name}
-			})
-			addonsInDir = window.multiselect.render({
-				elementId: 'allAddon',
-				data: addonData
-			})
-			const inPresetData = self.addonsInPreset.map((addon)=>{
-				return {value: addon.value, text: addon.text}
-			})
-			addonsInPresetSelectbox = window.multiselect.render({
-				elementId: 'presetAddon',
-				data: inPresetData
-			})
 		}
 
 		this.newPreset = ()=> {
@@ -175,7 +191,7 @@
 				self.checkDeletedAddon()
 			}
 			self.diffAddons()
-			self.updateSelectBox()
+			self.updateSelectBox(self.addons, self.addonsInPreset)
 			self.isInputName = false
 			self.update()
 		}
@@ -207,11 +223,11 @@
 			self.addons = self.addons.map((item)=>{
 				if ('steam' === item.type) {
 					return {
-						name: item.name + ' (Steam workshop)',
+						text: item.name + ' (Steam workshop)',
 						value: JSON.stringify(item)
 					}
 				}
-				return {name: item.name, value: JSON.stringify(item)}
+				return {text: item.name, value: JSON.stringify(item)}
 			})
 			allAddonList = self.addons
 			self.update()
@@ -242,7 +258,7 @@
 		this.reloadAddon = ()=> {
 			self.loadAddonsInA3Dir()
 			self.diffAddons()
-			self.updateSelectBox()
+			self.updateSelectBox(self.addons, self.addonsInPreset)
 			UIkit.notify("Addons list was reloaded.", {
 				status:'success',
 				pos:'top-right',
@@ -261,7 +277,7 @@
 			[...(new Set(self.addonsInPreset)),...(new Set(addonsInDir.getSelected()))].forEach(x=>distList.add(x))
 			self.addonsInPreset = [...distList]
 			self.diffAddons()
-			self.updateSelectBox()
+			self.updateSelectBox(self.addons, self.addonsInPreset)
 			self.update()
 		}
 
@@ -273,7 +289,7 @@
 				})
 			}
 			self.diffAddons()
-			self.updateSelectBox()
+			self.updateSelectBox(self.addons, self.addonsInPreset)
 			self.update()
 		}
 
@@ -287,7 +303,7 @@
 			}
 			self.addonsInPreset = addonArr
 			self.diffAddons()
-			self.updateSelectBox()
+			self.updateSelectBox(self.addons, self.addonsInPreset)
 			self.update()
 		}
 
@@ -301,7 +317,7 @@
 			}
 			self.addonsInPreset = addonArr
 			self.diffAddons()
-			self.updateSelectBox()
+			self.updateSelectBox(self.addons, self.addonsInPreset)
 			self.update()
 		}
 
@@ -309,7 +325,7 @@
 			self.addons = allAddonList
 			for (let va of self.addonsInPreset) {
 				self.addons = self.addons.filter((v)=> {
-					return v.name !== va.text
+					return v.text !== va.text
 				})
 			}
 		}
@@ -318,7 +334,7 @@
 			let deletedAddons = self.addonsInPreset
 			for (let vf of allAddonList) {
 				deletedAddons = deletedAddons.filter((v)=> {
-					return v.text !== vf.name
+					return v.text !== vf.text
 				})
 			}
 			if (0 != deletedAddons.length) {
@@ -441,6 +457,37 @@
 				self.refs.newPresetName.value = ''
 				self.update()
 			})
+		}
+
+		this.searchAddonInDir = () => {
+			const addons = self.addons
+			const searchWord = self.refs.search.value
+			if (searchWord === '') {
+				self.updateSelectBox(self.addons, null)
+				return
+			}
+			const result = self.searchAddon(addons, searchWord)
+			if (!result) return
+			self.updateSelectBox(result, null)
+		}
+
+		this.searchAddonInPreset = ()=> {
+			const addons = self.addonsInPreset
+			const searchWord = self.refs.searchPreset.value
+			if (searchWord === '') {
+				self.updateSelectBox(null, self.addonsInPreset)
+				return
+			}
+			const result = self.searchAddon(addons, searchWord)
+			if (!result) return
+			self.updateSelectBox(null, result)
+		}
+
+		this.searchAddon = (target, searchWord)=> {
+			const result = target.filter((addon)=>{
+				return addon.text.indexOf(searchWord) != -1
+			})
+			return result
 		}
 
 	</script>
