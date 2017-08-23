@@ -2,18 +2,18 @@ const app = require('electron').remote.app
 const fs = require('fs')
 const path = require('path')
 
-let common = {}
+let util = {}
 
-common.loadConfigFile = () => {
-	if (!common.isExistFileOrDir(path.join(app.getAppPath(), 'config.json'))) {
+util.loadConfigFile = () => {
+	if (!util.isExistFileOrDir(path.join(app.getAppPath(), 'config.json'))) {
 		initConfig()
 	}
 	return JSON.parse(fs.readFileSync(path.join(app.getAppPath(), 'config.json') || 'null', 'utf-8'))
 }
 
-common.loadAllPresets = () => {
+util.loadAllPresets = () => {
 	let presets = []
-	if (!common.isExistFileOrDir(path.join(app.getAppPath(), 'preset'))) {
+	if (!util.isExistFileOrDir(path.join(app.getAppPath(), 'preset'))) {
 		fs.mkdirSync(path.join(app.getAppPath(), 'preset'))
 	}
 	const presetList = fs.readdirSync(path.join(app.getAppPath(), 'preset'))
@@ -29,7 +29,7 @@ common.loadAllPresets = () => {
 	return presets
 }
 
-common.loadAddonsInPreset = (name) => {
+util.loadAddonsInPreset = (name) => {
 	const presetJSON = JSON.parse(fs.readFileSync(path.join(app.getAppPath(), 'preset/' + name), 'utf-8'))
 	const localArr = presetJSON.addons.map((addon)=>{
 		return {text: addon, value: JSON.stringify({name: addon, type: 'local'})}
@@ -45,7 +45,7 @@ common.loadAddonsInPreset = (name) => {
 	return preset
 }
 
-common.isExistFileOrDir = (name) => {
+util.isExistFileOrDir = (name) => {
 	try {
 		fs.statSync(name)
 		return true
@@ -54,11 +54,11 @@ common.isExistFileOrDir = (name) => {
 	}
 }
 
-common.savingLastUsePreset = (preset) => {
+util.savingLastUsePreset = (preset) => {
 	localStorage.setItem('lastUsePreset', preset)
 }
 
-common.loadLastUsePreset = () => {
+util.loadLastUsePreset = () => {
 	return localStorage.lastUsePreset
 }
 
@@ -77,4 +77,4 @@ const initConfig = () => {
 	})
 }
 
-module.exports = common
+module.exports = util
