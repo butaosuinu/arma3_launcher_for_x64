@@ -193,6 +193,7 @@
 			self.diffAddons()
 			self.updateSelectBox(self.addons, self.addonsInPreset)
 			self.isInputName = false
+			self.resetSearchForm()
 			self.update()
 		}
 
@@ -279,6 +280,8 @@
 			self.diffAddons()
 			self.updateSelectBox(self.addons, self.addonsInPreset)
 			self.update()
+			self.searchAddonInDir()
+			self.searchAddonInPreset()
 		}
 
 		this.removeAddon = ()=> {
@@ -291,6 +294,8 @@
 			self.diffAddons()
 			self.updateSelectBox(self.addons, self.addonsInPreset)
 			self.update()
+			self.searchAddonInDir()
+			self.searchAddonInPreset()
 		}
 
 		this.upAddon = ()=> {
@@ -488,6 +493,11 @@
 				return addon.text.indexOf(searchWord) != -1
 			})
 			return result
+		}
+
+		this.resetSearchForm = () => {
+			self.refs.search.value = ''
+			self.refs.searchPreset.value = ''
 		}
 
 	</script>
