@@ -394,8 +394,8 @@
 
 			const data = {
 				name: presetName,
+				steam: steamItem,
 				addons: addons,
-				steam: steamItem
 			}
 			const fileName = presetName.replace(/ /g, '_') + '.json'
 			fs.writeFile(path.join(app.getAppPath(), 'preset/' + fileName), JSON.stringify(data, null, ' '), function(err) {
