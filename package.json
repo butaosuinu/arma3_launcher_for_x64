@@ -43,7 +43,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "jquery": "^3.1.0",
-    "riot": "^3.3.2",
+    "riot": "^5.3.3",
     "riot-router": "^0.9.7",
     "riotcontrol": "0.0.3"
   }
